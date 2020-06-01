@@ -1,7 +1,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lambda.web.mappers.MovieMapper">
+<mapper namespace="com.kahlua.web.mappers.MovieMapper">
     <insert id="insertMovie"
             parameterType="com.kahlua.web.movie.MovieDTO">
         insert rank, title, rank_date into movie
@@ -18,11 +18,13 @@
         delete from movie where seq like #{seq}
     </delete>
 
-    <select id="selectMovies" resultType="com.kahlua.web.movie.MovieDTO">
+    <select id="selectMovies" resultType="com.kahlua.web.movie.MovieDTO"
+            parameterType="com.kahlua.web.proxy.Pager">
       select title title,
                 seq  seq,
                 rank_date  rankDate
       from movie
+      limit #{rowStart},#{pageSize}
     </select>
 
     <select id="selectMovie" resultType="com.kahlua.web.movie.MovieDTO">

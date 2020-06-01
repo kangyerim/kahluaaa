@@ -24,7 +24,7 @@ const actions = {
             })
     },
     async movie({commit},searchWord){
-        axios.get(state.context+`movie/${searchWord}`)
+        axios.get(state.context+`movie/list/0/${searchWord}`)
             .then(({data})=>{
                 commit('MOVIE',data)
                 router.push('/retrieveMovie')
@@ -48,6 +48,7 @@ const mutations = {
         })
     },
     MOVIE(state, data){
+        alert('뮤테이션 결과수 ' +data.count)
         state.movie = []
         state.count = data.count
         data.list.forEach(item =>{

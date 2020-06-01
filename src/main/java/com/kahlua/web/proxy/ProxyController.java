@@ -36,14 +36,11 @@ public class ProxyController{
         loader.upload();
         return null;
     }
+
+
     @GetMapping("/movie/{searchWord}")
-    public HashMap<String, Object> movie(@PathVariable String searchWord){
-        pxy.print("넘어온 키워드 : " + searchWord);
-        box.clear();
+    public void movie(@PathVariable String searchWord){
         if(movieRepository.count() == 0) crawler.movieChart();
-        List<Movie> chart = movieRepository.findAll();
-        box.put("list",chart);
-        box.put("count",chart.size());
-        return box.get();
     }
+
 }
