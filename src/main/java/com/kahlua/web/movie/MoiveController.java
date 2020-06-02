@@ -23,9 +23,11 @@ public class MoiveController{
         if(searchWord.equals("")){
             pxy.print("검색어 없음");
         } else {pxy.print("검색어는 : "+searchWord);}
+
         pager.setPageNow(pxy.integer(pageNumber));
         pager.setBlockSize(5);
         pager.setPageSize(5);
+        pager.paging();
         IFunction<Pager, List<MovieDTO>> f = p -> movieMapper.selectMovies(p);
         List<MovieDTO> l = f.apply(pager);
         pxy.print("*******");
@@ -33,7 +35,7 @@ public class MoiveController{
             pxy.print(m.toString());
         }
         box.clear();
-        box.put("count",l.size());
+        box.put("pager", pager);
         box.put("list", l);
         return box.get();
     }

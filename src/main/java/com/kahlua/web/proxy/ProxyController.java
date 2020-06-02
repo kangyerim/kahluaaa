@@ -21,7 +21,7 @@ public class ProxyController{
     @Autowired MovieRepository movieRepository;
 
     @PostMapping("/bugsmusic")
-    public HashMap<String,Object> bugsmusic(@RequestBody String searchWord) {
+    public HashMap<?,?> bugsmusic(@RequestBody String searchWord) {
         box.clear();
         if(musicRepository.count() == 0) crawler.bugsMusic();
         List<Music> chart =  musicRepository.findAll();
@@ -31,7 +31,7 @@ public class ProxyController{
         return box.get();
     }
     @GetMapping("/soccer/{searchWord}")
-    public HashMap<String, Object> soccer(@PathVariable String searchWord) {
+    public HashMap<?, ?> soccer(@PathVariable String searchWord) {
         pxy.print("넘어온 키워드 " + searchWord);
         loader.upload();
         return null;

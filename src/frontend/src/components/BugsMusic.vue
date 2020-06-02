@@ -12,11 +12,9 @@
         <div>
             <input id="search" v-model="searchWord" type="text" style=" background-repeat: no-repeat; background-position: 88% 50%, 98% 50%;" title="검색">
         </div>
-        <router-link to="/retrieve">
         <div id="box">
             <input  @click="search" id="google_search" type="button" value="Google 검색">
         </div>
-        </router-link>
         <div id="bottom">
             <div id="bottom_left">
                 <a>광고</a>
@@ -38,6 +36,9 @@
             return {
                 searchWord: ""
             }
+        },
+        created() {
+            alert('HOME _ created run :) hook event 는 noevent / callback은 event')
         },
         methods: {
             search() {

@@ -9,6 +9,16 @@ const state = {
     searchWord : ''
 }
 const actions = {
+    async movie({commit},searchWord){
+        axios.get(state.context+`movie/list/0/${searchWord}`)
+            .then(({data})=>{
+                commit('MOVIE',data)
+                router.push('/movie')
+            })
+            .catch(()=>{
+                alert('commit fail :(')
+            })
+    },
     async search({ commit }, x) {
         axios.post(state.context + `bugsmusic`, x, {
                 authorization: "JWT fefege..",
@@ -21,16 +31,6 @@ const actions = {
             })
             .catch(() => {
                 alert("통신 실패 !")
-            })
-    },
-    async movie({commit},searchWord){
-        axios.get(state.context+`movie/list/0/${searchWord}`)
-            .then(({data})=>{
-                commit('MOVIE',data)
-                router.push('/retrieveMovie')
-            })
-            .catch(()=>{
-                alert('commit fail :(')
             })
     }
 }
@@ -48,7 +48,6 @@ const mutations = {
         })
     },
     MOVIE(state, data){
-        alert('뮤테이션 결과수 ' +data.count)
         state.movie = []
         state.count = data.count
         data.list.forEach(item =>{
@@ -66,7 +65,7 @@ const getters = {
 }
 
 export default {
-    name: "crawling",
+    name: 'crawling',
     namespaced: true,
     state,
     actions,

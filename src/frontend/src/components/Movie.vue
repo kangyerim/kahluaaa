@@ -5,7 +5,9 @@
                 <img id="google" src="https://www.google.com/logos/doodles/2020/stay-and-play-at-home-with-popular-past-google-doodles-halloween-2016-6753651837108773-2xa.gif" title="Google">
             </router-link>
         </div>
-
+        <div>
+            검색 된 결과 수 : {{count}}
+        </div>
         <v-simple-table>
             <thead>
             <tr>
@@ -22,7 +24,14 @@
         </v-simple-table>
 
         <div class="text-center">
-            <v-pagination v-model="page" :length="5" :total-visible="5"></v-pagination>
+            <div style="margin: 0 auto; width:500px; height: 100px;"></div>
+            <span v-if="existPre"
+                    style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">PRE</span>
+            <span v-for="n of arr" :key="n"
+                    style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">{{n}}</span>
+            <span v-if="existNext"
+                    style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">NEXT</span>
+           <!-- <v-pagination v-model="page" :length="5" :total-visible="5"></v-pagination>-->
         </div>
 
 
@@ -34,10 +43,16 @@
     export default {
         data() {
             return {
-                page: 1
+                page: 1,
+                existPre : false,
+                existNext : true,
+                arr : [6,7,8,9,10]
             };
         },
-        computed: {
+        created() {
+            alert('MOVIE _ created run :)')
+        },
+        computed : {
             ...mapState({
                 count: state => state.crawling.count,
                 movie :  state => state.crawling.movie

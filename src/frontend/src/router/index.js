@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import BugsMusic from "../components/BugsMusic";
 import Retrieve from "../components/Retrieve";
-import RetrieveMovie from "../components/RetrieveMovie";
+import Movie from "../components/Movie";
 
 Vue.use(Router)
 
@@ -13,6 +13,6 @@ export default new Router({
     routes : [
         {path : '/', component : BugsMusic},
         {path : '/retrieve', component : Retrieve},
-        {path : '/retrieveMovie', component : RetrieveMovie}
+        {path : '/movie', component : Movie}
     ]
 })
