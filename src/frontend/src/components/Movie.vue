@@ -6,7 +6,7 @@
             </router-link>
         </div>
         <div>
-            검색 된 결과 수 : {{count}}
+            검색 된 결과 수 : {{pager.rowCount}}
         </div>
         <v-simple-table>
             <thead>
@@ -16,7 +16,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in movie" :key="item.name">
+            <tr v-for="item of list" :key="item.name">
                 <td>{{ item.seq }}</td>
                 <td>{{ item.title }}</td>
             </tr>
@@ -25,11 +25,11 @@
 
         <div class="text-center">
             <div style="margin: 0 auto; width:500px; height: 100px;"></div>
-            <span v-if="existPre"
+            <span v-if="pager.existPre"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">PRE</span>
-            <span v-for="n of arr" :key="n"
+            <span v-for="n of pages" :key="n"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">{{n}}</span>
-            <span v-if="existNext"
+            <span v-if="pager.existNext"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">NEXT</span>
            <!-- <v-pagination v-model="page" :length="5" :total-visible="5"></v-pagination>-->
         </div>
@@ -40,22 +40,39 @@
 
 <script>
     import { mapState } from "vuex";
+    import axios from "axios";
     export default {
         data() {
             return {
-                page: 1,
-                existPre : false,
-                existNext : true,
-                arr : [6,7,8,9,10]
+                pageNumver: 0,
+                pages : [],
+                list : [],
+                pager : {},
+                totalCount : ''
             };
         },
         created() {
             alert('MOVIE _ created run :)')
+            axios.get(`${this.$store.state.search.context}/movies/${this.$store.state.search.searchWord}/${this.$store.state.search.pageNumber}`)
+                .then(res=>{
+                    res.data.list.forEach(elem => {this.list.push(elem)})
+                    this.pager = res.data.pager
+                    let i = this.pager.pageStart + 1
+                    let arr = []
+                    console.log(`pageEnd : ${this.pager.pageEnd}`)
+                    for(; i <= this.pager.pageEnd + 1 ; i++){
+                        arr.push(i)
+                    }
+                    this.pages = arr
+                })
+                .catch(err=>{
+                    alert(`movie cooomit fail :: ${err}`)
+                })
+
         },
         computed : {
             ...mapState({
-                count: state => state.crawling.count,
-                movie :  state => state.crawling.movie
+
             })
         }
     };

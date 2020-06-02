@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movies")
 @CrossOrigin(origins = "http://localhost:8080", allowedHeaders = "*")
 public class MoiveController{
     @Autowired Pager pager;
@@ -17,7 +17,7 @@ public class MoiveController{
     @Autowired Proxy pxy;
     @Autowired Box<Object> box;
 
-    @GetMapping("/list/{pageNumber}/{searchWord}")
+    @GetMapping("/{searchWord}/{pageNumber}")
     public Map<?,?> list(@PathVariable("pageNumber") String pageNumber,
                          @PathVariable("searchWord") String searchWord){
         if(searchWord.equals("")){

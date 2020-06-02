@@ -41,10 +41,13 @@
                 page: 1
             };
         },
+        created() {
+            alert('music created')
+        },
         computed: {
             ...mapState({
-                bugsmusic: state => state.crawling.bugsmusic,
-                count: state => state.crawling.count
+                bugsmusic: state => state.search.bugsmusic,
+                count: state => state.search.count
             })
         }
     };

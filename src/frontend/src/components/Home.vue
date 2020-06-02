@@ -37,22 +37,10 @@
                 searchWord: ""
             }
         },
-        created() {
-            alert('HOME _ created run :) hook event 는 noevent / callback은 event')
-        },
+
         methods: {
             search() {
-                switch (this.searchWord) {
-                    case '벅스':
-                        this.$store.dispatch("crawling/search", this.searchWord)
-                    break
-                    case '축구':
-                        this.$store.dispatch('soccer/search',this.searchWord)
-                    break
-                    case '영화':
-                        this.$store.dispatch('crawling/movie',this.searchWord)
-                    break
-                }
+                this.$store.dispatch("search/find", this.searchWord)
             }
         }
     }
