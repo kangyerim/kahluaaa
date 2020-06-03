@@ -37,7 +37,6 @@
                 searchWord: ""
             }
         },
-
         methods: {
             search() {
                 this.$store.dispatch("search/find", this.searchWord)

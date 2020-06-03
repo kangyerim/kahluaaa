@@ -67,7 +67,7 @@ public class Crawler extends Proxy {
                 movie = new Movie();
                 movie.setSeq(string(i+1));
                 movie.setTitle(arr.get(i).text());
-                movie.setRankDate(date.get(0).text());
+                movie.setRankDate(date.get(i).text());
                 movieRepository.save(movie);
             }
         } catch (Exception e){

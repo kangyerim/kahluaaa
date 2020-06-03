@@ -8,6 +8,7 @@
         <div>
             검색 된 결과 수 : {{pager.rowCount}}
         </div>
+        <a @click="myAlert('sssss')">믹스인 테스트</a>
         <v-simple-table>
             <thead>
             <tr>
@@ -27,7 +28,7 @@
             <div style="margin: 0 auto; width:500px; height: 100px;"></div>
             <span v-if="pager.existPre"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">PRE</span>
-            <span v-for="n of pages" :key="n"
+            <span v-for="n of pages" :key="n" @click="transferPage(n)"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">{{n}}</span>
             <span v-if="pager.existNext"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">NEXT</span>
@@ -40,42 +41,32 @@
 
 <script>
     import { mapState } from "vuex";
-    import axios from "axios";
-    export default {
-        data() {
-            return {
-                pageNumver: 0,
-                pages : [],
-                list : [],
-                pager : {},
-                totalCount : ''
-            };
-        },
-        created() {
-            alert('MOVIE _ created run :)')
-            axios.get(`${this.$store.state.search.context}/movies/${this.$store.state.search.searchWord}/${this.$store.state.search.pageNumber}`)
-                .then(res=>{
-                    res.data.list.forEach(elem => {this.list.push(elem)})
-                    this.pager = res.data.pager
-                    let i = this.pager.pageStart + 1
-                    let arr = []
-                    console.log(`pageEnd : ${this.pager.pageEnd}`)
-                    for(; i <= this.pager.pageEnd + 1 ; i++){
-                        arr.push(i)
-                    }
-                    this.pages = arr
-                })
-                .catch(err=>{
-                    alert(`movie cooomit fail :: ${err}`)
-                })
+    import {proxy} from './mixins/proxy'
 
+    export default {
+        mixins: [proxy],
+        created() {
+            let json = proxy.methods.paging(`${this.$store.state.search.context}/movies/null/0`)
+            this.$store.state.search.list = json.movies
+            this.$store.state.search.pages = json.pages
+            this.$store.state.search.pager = json.temp
+            console.log('크리에이티드: '+json.temp.pageSize)
+        },
+        methods : {
+            transferPage(pageNumber){
+                this.$store.dispatch('search/transferPage',
+                    {cate : 'movies',searchWord : 'null',pageNumber : pageNumber - 1})
+          }
         },
         computed : {
             ...mapState({
-
+                list: state => state.search.list,
+                pages: state => state.search.pages,
+                pager: state => state.search.pager
             })
         }
-    };
+    }
+
 </script>
 
 <style scoped>

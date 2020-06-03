@@ -1,10 +1,10 @@
 import router from "../router"
+import axios from "axios"
 
 const state = {
     context : 'http://localhost:5000',
-    soccer : [],
-    movies : [],
-    music : [],
+    list : [],
+    pages : [],
     pager : {},
     pageNumber : 0,
     searchWord : 'null'
@@ -17,35 +17,35 @@ const actions = {
             case '영화':
                 router.push('/movie')
                 break
-            case '음악':
+            case '벅스':
                 router.push('/music')
                 break
             case '축구':
                 router.push('/soccer')
                 break
           }
-        }
-}
-const mutations = {
-    TEST() {
-        alert('mutation.soccer')
-        state.pager = {}
-    },
-    MOVIE(state, data) {
-        state.movies = [];
-        state.pager = data.pager;
-        data.list.forEach(item => {
-            state.movies.push({
-                seq : item.seq,
-                title : item.title
+        },
+    async transferPage({commit},payload){
+        axios.get(`${state.context}/${payload.cate}/${payload.searchWord}/${payload.pageNumber}`)
+            .then(({data})=>{
+                commit('TRANSFER',data)
             })
-        })
+            .catch()
+
     }
 }
-const getters = {}
+const mutations = {
+    TEST(state, data) {
+        state.searchWord = data
+    },
+    TRANSFER(state, data){
+        state.pager = data.pager
+        state.list = data.list
+    }
+}
 
 export default {
     name : 'search',
     namespaced : true,
-    state,actions,mutations,getters
+    state,actions,mutations
 }
