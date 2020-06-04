@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/movies")
@@ -20,15 +21,19 @@ public class MoiveController{
     @GetMapping("/{searchWord}/{pageNumber}")
     public Map<?,?> list(@PathVariable("pageNumber") String pageNumber,
                          @PathVariable("searchWord") String searchWord){
-        if(searchWord.equals("")){
+        if(searchWord.equals("null")){
             pxy.print("검색어 없음");
-        } else {pxy.print("검색어는 : "+searchWord);}
+            pager.setSearchWord("");
+        } else {
+            pxy.print("검색어는 : "+searchWord);
+            pager.setSearchWord(searchWord);
+        }
         pxy.print("넘어온 페이지 번호  : "+pageNumber);
         pager.setPageNow(pxy.integer(pageNumber));
         pager.setBlockSize(5);
         pager.setPageSize(5);
         pager.paging();
-        IFunction<Pager, List<MovieDTO>> f = p -> movieMapper.selectMovies(p);
+        Function<Pager, List<MovieDTO>> f = p -> movieMapper.selectMovies(p);
         List<MovieDTO> l = f.apply(pager);
         for(MovieDTO m : l){
             pxy.print(m.toString());
@@ -37,5 +42,10 @@ public class MoiveController{
         box.put("pager", pager);
         box.put("list", l);
         return box.get();
+    }
+
+    @GetMapping("/{searchWord}")
+    public MovieDTO findOne(@PathVariable String searchWord){
+        return movieMapper.selectMovie(searchWord);
     }
 }

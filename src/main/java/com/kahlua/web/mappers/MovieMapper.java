@@ -12,4 +12,6 @@ public interface MovieMapper {
     public void insertMovie();
     public int count();
     public List<MovieDTO> selectMovies(Pager pager);
+    public MovieDTO selectMovie(String seq);
+
 }

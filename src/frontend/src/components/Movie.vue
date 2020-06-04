@@ -8,7 +8,8 @@
         <div>
             검색 된 결과 수 : {{pager.rowCount}}
         </div>
-        <a @click="myAlert('sssss')">믹스인 테스트</a>
+        <span style="float:right"><input id="searchWord" type="text"><button @click="search">검 색</button></span>
+
         <v-simple-table>
             <thead>
             <tr>
@@ -19,23 +20,21 @@
             <tbody>
             <tr v-for="item of list" :key="item.name">
                 <td>{{ item.seq }}</td>
-                <td>{{ item.title }}</td>
+                <td><a @click="findOne(item.seq)" href="#">{{ item.title }}</a></td>
             </tr>
             </tbody>
         </v-simple-table>
 
         <div class="text-center">
             <div style="margin: 0 auto; width:500px; height: 100px;"></div>
-            <span v-if="pager.existPre"
+            <span v-if="pager.existPre" @click="transferPage(pager.prevBlock)"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">PRE</span>
-            <span v-for="n of pages" :key="n" @click="transferPage(n)"
+            <span v-for="n of pages" :key="n" @click="transferPage(n-1)"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">{{n}}</span>
-            <span v-if="pager.existNext"
+            <span v-if="pager.existNext" @click="transferPage(pager.nextBlock)"
                     style="width: 50px; height: 50px; border: 1px solid black; margin-right: 5px">NEXT</span>
            <!-- <v-pagination v-model="page" :length="5" :total-visible="5"></v-pagination>-->
         </div>
-
-
     </div>
 </template>
 
@@ -50,13 +49,25 @@
             this.$store.state.search.list = json.movies
             this.$store.state.search.pages = json.pages
             this.$store.state.search.pager = json.temp
-            console.log('크리에이티드: '+json.temp.pageSize)
+            console.log('크리에이티드: '+ json.temp.pageSize)
         },
         methods : {
             transferPage(pageNumber){
+                proxy.methods.tester(pageNumber)
                 this.$store.dispatch('search/transferPage',
-                    {cate : 'movies',searchWord : 'null',pageNumber : pageNumber - 1})
-          }
+                    {cate : 'movies',searchWord : 'null',pageNumber : pageNumber})
+          },
+            search(){
+                let searchWord = document.getElementById('searchWord').value
+                if(searchWord === '') searchWord = 'null'
+                this.$store.dispatch('search/transferPage',
+                    {cate : 'movies',searchWord : searchWord, pageNumber : 0})
+            },
+            findOne(item){
+                proxy.methods.tester(item)
+                this.$store.dispatch('search/findOne',
+                    {cate : 'movies', searchWord : item})
+            }
         },
         computed : {
             ...mapState({

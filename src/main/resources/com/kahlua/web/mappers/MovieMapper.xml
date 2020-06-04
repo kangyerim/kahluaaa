@@ -24,6 +24,9 @@
                 seq  seq,
                 rank_date  rankDate
       from movie
+      <if test="searchWord != null">
+          where title like '%${searchWord}%'
+      </if>
       limit #{rowStart},#{pageSize}
     </select>
 

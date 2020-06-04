@@ -7,7 +7,8 @@ const state = {
     pages : [],
     pager : {},
     pageNumber : 0,
-    searchWord : 'null'
+    searchWord : 'null',
+    item : {}
 }
 
 const actions = {
@@ -31,7 +32,13 @@ const actions = {
                 commit('TRANSFER',data)
             })
             .catch()
-
+    },
+    async findOne({commit},payload){
+        axios.get(`${state.context}/${payload.cate}/${payload.searchWord}`)
+            .then(({data})=>{
+                commit('FIND_ONE',data)
+                router.push('/movieDetail')
+            })
     }
 }
 const mutations = {
@@ -41,6 +48,9 @@ const mutations = {
     TRANSFER(state, data){
         state.pager = data.pager
         state.list = data.list
+    },
+    FIND_ONE(state, data){
+        state.item = data
     }
 }
 
